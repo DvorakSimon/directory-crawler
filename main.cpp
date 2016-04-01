@@ -95,7 +95,7 @@ int main(void)
 {
     // A root path where you want to start searching.
     // User will specify (UWS).
-    // For example: "/home/simon/Plocha/Simon/Data/Pokus" if it exists of course
+    // For example: "/home/simon/Plocha/Simon/Data/Pokus" if it exists of course.
     string searchedDir;
     // UWS
     // For example: "VEPR.TXT"
