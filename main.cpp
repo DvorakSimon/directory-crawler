@@ -63,6 +63,8 @@ vector<string> getFiles(string dirPath)
 
     // Call a function to try to open the dir by path.
     // If it doesnt exists the function will return segmentation error.
+    // TODO: Sanitize and check the dirPath and handle the errors.
+    // Sanitize: double slashes, ...
     DIR *dir = opendir(DIR_PATH);
 
     // Then try to read the dir
