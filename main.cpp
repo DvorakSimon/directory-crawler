@@ -117,7 +117,7 @@ int main(void)
 
     // File is/isnt exactly matching with name.
     bool exactMatch = false;
-    string strExactMath;
+    string strExactMatch;
 
     cout << "Zadej adresář, ve kterém chceš hledat: ";
     cin >> searchedDir;
@@ -131,10 +131,10 @@ int main(void)
 
     while(true) {
         cout << "Musí se soubor shodovat přesně? (y/n): ";
-        cin >> strExactMath;
-        if(!strExactMath.empty()) {
-            if(strExactMath == "y" || strExactMath == "n") {
-                if(strExactMath == "y") {
+        cin >> strExactMatch;
+        if(!strExactMatch.empty()) {
+            if(strExactMatch == "y" || strExactMatch == "n") {
+                if(strExactMatch == "y") {
                     exactMatch = true;
                 }
                 break;
