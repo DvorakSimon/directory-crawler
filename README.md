@@ -1,2 +1,2 @@
 # directory-crowler
-Fast program for searching files on file system
+Fast program for searching files on file system on UNIX based OS...
