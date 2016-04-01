@@ -95,11 +95,15 @@ int main(void)
 {
     // A root path where you want to start searching.
     // User will specify (UWS).
-    // For example: "/home/simon/Plocha/Simon/Data/Pokus" if it exists of course.
+    // For example: "/home/simon/Plocha/Simon/Data/Pokus" if it exists of course
     string searchedDir;
     // UWS
     // For example: "VEPR.TXT"
     string searchedFile;
+
+    // File is/isnt exactly matching with name.
+    bool exactMatch = false;
+    string strExactMath;
 
     cout << "Zadej adresář, ve kterém chceš hledat: ";
     cin >> searchedDir;
@@ -110,6 +114,24 @@ int main(void)
     cin >> searchedFile;
 
     cout << "Hledám soubor: " << searchedFile << endl;
+
+    while(true) {
+        cout << "Musí se soubor shodovat přesně? (y/n): ";
+        cin >> strExactMath;
+        if(!strExactMath.empty()) {
+            if(strExactMath == "y" || strExactMath == "n") {
+                if(strExactMath == "y") {
+                    exactMatch = true;
+                }
+                break;
+            } else {
+                cout << "Povolené odpovědi jsou pouze y nebo n!";
+            }
+        } else {
+            cout << "Nic jsi nezadal!" << endl;
+            return 1;
+        }
+    }
 
     stack<string> actDir;
 
@@ -133,10 +155,18 @@ int main(void)
         for(unsigned j = 0; j < fileFound.size(); j++) {
             cout << "Soubor: " << fileFound.at(j) << endl;
             cout << "POROVNAVAM: " << fileFound.at(j) << " a " << searchedFile << endl;
-            if(fileFound.at(j) == searchedFile) {
-                cout << "Soubor nalezen ve slozce " << actSearchedDir << "." << endl;
-                cout << "Soubor se tedy nachází v " << actSearchedDir << "/" << searchedFile << endl;
-                return 0;
+            if(exactMatch) {
+                if(fileFound.at(j) == searchedFile) {
+                    cout << "Soubor nalezen ve slozce " << actSearchedDir << "." << endl;
+                    cout << "Soubor se tedy nachází v " << actSearchedDir << "/" << fileFound.at(j) << endl;
+                    return 0;
+                }
+            } else {
+                if(fileFound.at(j).find(searchedFile) != string::npos) {
+                    cout << "Soubor nalezen ve slozce " << actSearchedDir << "." << endl;
+                    cout << "Soubor se tedy nachází v " << actSearchedDir << "/" << fileFound.at(j) << endl;
+                    return 0;
+                }
             }
         }
 
