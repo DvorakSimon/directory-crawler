@@ -4,6 +4,7 @@
 #include <dirent.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <sys/timeb.h>
 
 using namespace std;
 
@@ -91,14 +92,83 @@ vector<string> getFiles(string dirPath)
     return files;
 }
 
+void getFoundMessage(string actSearchedDir, string fileName) {
+    cout << "Soubor nalezen ve slozce " << actSearchedDir << "." << endl;
+    cout << "Soubor se tedy nachází v " << actSearchedDir << "/" << fileName << endl;
+}
+
+long getCurrentTime() {
+    timeb timebstr;
+    ftime( &timebstr );
+    return (long)(timebstr.time)*1000 + timebstr.millitm;
+}
+
 int main(void)
 {
     // A root path where you want to start searching.
     // User will specify (UWS).
-    string searchedDir = "/home/simon/Plocha/Simon/Data/Pokus";
-
+    // For example: "/home/simon/Plocha/Simon/Data/Pokus" if it exists of course
+    string searchedDir;
     // UWS
-    string searchedFile = "VEPR.TXT";
+    // For example: "VEPR.TXT"
+    string searchedFile;
+
+    // File is/isnt exactly matching with name.
+    bool exactMatch = false;
+    string strExactMath;
+
+    cout << "Zadej adresář, ve kterém chceš hledat: ";
+    cin >> searchedDir;
+
+    cout << "Budu hledat ve složce: " << searchedDir << endl;
+
+    cout << "Zadej soubor, který chceš hledat: ";
+    cin >> searchedFile;
+
+    cout << "Hledám soubor: " << searchedFile << endl;
+
+    while(true) {
+        cout << "Musí se soubor shodovat přesně? (y/n): ";
+        cin >> strExactMath;
+        if(!strExactMath.empty()) {
+            if(strExactMath == "y" || strExactMath == "n") {
+                if(strExactMath == "y") {
+                    exactMatch = true;
+                }
+                break;
+            } else {
+                cout << "Povolené odpovědi jsou pouze y nebo n!";
+            }
+        } else {
+            cout << "Nic jsi nezadal!" << endl;
+            return 1;
+        }
+    }
+
+    bool allFiles = true;
+    string strAllFiles;
+
+    while(true) {
+        cout << "Přejete si hledat všechny soubory? (y/n): ";
+        cin >> strAllFiles;
+        if(!strAllFiles.empty()) {
+            if(strAllFiles == "y" || strAllFiles == "n") {
+                if(strAllFiles == "n") {
+                    allFiles = false;
+                }
+                break;
+            } else {
+                cout << "Povolené odpovědi jsou pouze y, nebo n!";
+            }
+        } else {
+            cout << "Nic jsi nezadal!" << endl;
+            return 1;
+        }
+    }
+
+
+
+    long startTime = getCurrentTime();
 
     stack<string> actDir;
 
@@ -108,6 +178,8 @@ int main(void)
 
     vector<string> dirFound;
     vector<string> fileFound;
+
+    vector<string> results;
 
     int dirCount = 0;
 
@@ -120,12 +192,26 @@ int main(void)
         fileFound = getFiles(actSearchedDir.c_str());
 
         for(unsigned j = 0; j < fileFound.size(); j++) {
-            cout << "Soubor: " << fileFound.at(j) << endl;
-            cout << "POROVNAVAM: " << fileFound.at(j) << " a " << searchedFile << endl;
-            if(fileFound.at(j) == searchedFile) {
-                cout << "Soubor nalezen ve slozce " << actSearchedDir << "." << endl;
-                cout << "Soubor se tedy nachází v" << actSearchedDir << "/" << searchedFile << endl;
-                return 0;
+            //cout << "Soubor: " << fileFound.at(j) << endl;
+            //cout << "POROVNAVAM: " << fileFound.at(j) << " a " << searchedFile << endl;
+            if(exactMatch) {
+                if(fileFound.at(j) == searchedFile) {
+                    if(allFiles) {
+                        results.push_back(actSearchedDir + "/" + fileFound.at(j));
+                    } else {
+                        getFoundMessage(actSearchedDir, fileFound.at(j));
+                        return 0;
+                    }
+                }
+            } else {
+                if(fileFound.at(j).find(searchedFile) != string::npos) {
+                    if(allFiles) {
+                        results.push_back(actSearchedDir + "/" + fileFound.at(j));
+                    } else {
+                        getFoundMessage(actSearchedDir, fileFound.at(j));
+                        return 0;
+                    }
+                }
             }
         }
 
@@ -139,7 +225,21 @@ int main(void)
         dirCount++;
     }
 
-    cout << "Bylo nalezeno celkem " << dirCount-1 << " složek";
+    if(allFiles) {
+        cout << "------------------------------" << endl;
+        cout << "-- Výpis nalezených souborů --" << endl;
+        cout << "------------------------------" << endl;
+
+        for(unsigned k = 0; k < results.size(); k++) {
+            cout << results.at(k) << endl;
+        }
+    }
+
+    long endTime = getCurrentTime();
+
+    cout << "Bylo nalezeno celkem " << dirCount-1 << " složek" << endl;
+    cout << "Hledání celkem zabralo " << int(endTime - startTime) << " milisekund." << endl;
+    cout << "To je asi " << double(endTime - startTime) / 1000 << " sekund." << endl;
 
     return 0;
 }
