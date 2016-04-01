@@ -9,7 +9,7 @@ using namespace std;
 /*
  * The function returns directories found in directory.
  * First parameter is path where you want to find directories.
- * You can also use double slashes like this ...../dir/dir//dir. Not reomanded!
+ * You can also use double slashes like this ...../dir/dir//dir. Not recomanded!
  */
 vector<string> getDirs(string dirPath)
 {
