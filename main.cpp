@@ -91,6 +91,11 @@ vector<string> getFiles(string dirPath)
     return files;
 }
 
+void getFoundMessage(string actSearchedDir, string fileName) {
+    cout << "Soubor nalezen ve slozce " << actSearchedDir << "." << endl;
+    cout << "Soubor se tedy nachází v " << actSearchedDir << "/" << fileName << endl;
+}
+
 int main(void)
 {
     // A root path where you want to start searching.
@@ -157,14 +162,12 @@ int main(void)
             cout << "POROVNAVAM: " << fileFound.at(j) << " a " << searchedFile << endl;
             if(exactMatch) {
                 if(fileFound.at(j) == searchedFile) {
-                    cout << "Soubor nalezen ve slozce " << actSearchedDir << "." << endl;
-                    cout << "Soubor se tedy nachází v " << actSearchedDir << "/" << fileFound.at(j) << endl;
+                    getFoundMessage(actSearchedDir, fileFound.at(j));
                     return 0;
                 }
             } else {
                 if(fileFound.at(j).find(searchedFile) != string::npos) {
-                    cout << "Soubor nalezen ve slozce " << actSearchedDir << "." << endl;
-                    cout << "Soubor se tedy nachází v " << actSearchedDir << "/" << fileFound.at(j) << endl;
+                    getFoundMessage(actSearchedDir, fileFound.at(j));
                     return 0;
                 }
             }
