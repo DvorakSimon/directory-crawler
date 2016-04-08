@@ -1,11 +1,16 @@
 #ifndef CHECKER_H
 #define CHECKER_H
 
+#include <iostream>
+
+using namespace std;
 
 class Checker
 {
     public:
-        Checker();
+        string CheckPath();
+
+        Checker(string path);
         virtual ~Checker();
     protected:
     private:
